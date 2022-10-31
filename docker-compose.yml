@@ -1,0 +1,133 @@
+version: "3.7"
+services:
+  mongodb:
+    image: mongo
+    restart: always
+    expose:
+      - 27017
+    ports:
+      - 27017:27017
+    networks:
+      - development-network
+  ms-config-server:
+    container_name: ms-config-server
+    build:
+      context: ../ms-config-server
+    mem_limit: 512m
+    restart: always
+    ports:
+      - 8888:8888
+    networks:
+      - development-network
+  ms-discovery:
+    container_name: ms-discovery
+    build:
+      context: ../ms-discovery
+    restart: always
+    ports:
+      - 9093:9093
+    depends_on:
+      - ms-config-server
+    networks:
+      - development-network
+  ms-gateway:
+    container_name: ms-gateway
+    build:
+      context: ../ms-gateway
+    restart: always
+    ports:
+      - 9090:9090
+    links:
+      - ms-config-server
+    depends_on:
+      - ms-discovery
+      - ms-config-server
+    networks:
+      - development-network
+  ms-client:
+    container_name: ms-client
+    build:
+      context: ../ms-client
+    restart: always
+    ports:
+      - 8080:8080
+    links:
+      - mongodb
+      - ms-config-server
+      - ms-discovery
+    depends_on:
+      - mongodb
+      - ms-config-server
+      - ms-discovery
+    networks:
+      - development-network
+  ms-bank-account:
+    container_name: ms-bank-account
+    build:
+      context: ../ms-bank-account
+    restart: always
+    ports:
+      - 8085:8085
+    links:
+      - mongodb
+      - ms-config-server
+      - ms-discovery
+    depends_on:
+      - mongodb
+      - ms-config-server
+      - ms-discovery
+    networks:
+      - development-network
+  ms-credit:
+    container_name: ms-credit
+    build:
+      context: ../ms-credits
+    restart: always
+    ports:
+      - 8084:8084
+    links:
+      - mongodb
+      - ms-config-server
+      - ms-discovery
+    depends_on:
+      - mongodb
+      - ms-config-server
+      - ms-discovery
+    networks:
+      - development-network
+  ms-loan:
+    container_name: ms-loan
+    build:
+      context: ../ms-loan
+    restart: always
+    ports:
+      - 8081:8081
+    links:
+      - mongodb
+      - ms-config-server
+      - ms-discovery
+    depends_on:
+      - mongodb
+      - ms-config-server
+      - ms-discovery
+    networks:
+      - development-network
+  ms-movement:
+    container_name: ms-movement
+    build:
+      context: ../ms-movement
+    restart: always
+    ports:
+      - 8083:8083
+    links:
+      - mongodb
+      - ms-config-server
+      - ms-discovery
+    depends_on:
+      - mongodb
+      - ms-config-server
+      - ms-discovery
+    networks:
+      - development-network
+networks:
+  development-network:
