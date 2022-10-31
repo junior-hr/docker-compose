@@ -129,5 +129,22 @@ services:
       - ms-discovery
     networks:
       - development-network
+  debit-card:
+    container_name: debit-card
+    build:
+      context: ../debit-card
+    restart: always
+    ports:
+      - 8086:8086
+    links:
+      - mongodb
+      - ms-config-server
+      - ms-discovery
+    depends_on:
+      - mongodb
+      - ms-config-server
+      - ms-discovery
+    networks:
+      - development-network
 networks:
   development-network:
