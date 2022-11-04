@@ -101,7 +101,7 @@ services:
       context: ../ms-loan
     restart: always
     ports:
-      - 8081:8081
+      - 8092:8092
     links:
       - mongodb
       - ms-config-server
@@ -146,5 +146,56 @@ services:
       - ms-discovery
     networks:
       - development-network
+  ms-person-type:
+    container_name: ms-person-type
+    build:
+      context: ../ms-person-type
+    restart: always
+    ports:
+      - 8087:8087
+    links:
+      - mongodb
+      - ms-config-server
+      - ms-discovery
+    depends_on:
+      - mongodb
+      - ms-config-server
+      - ms-discovery
+    networks:
+      - development-network
+  ms-account-type:
+    container_name: ms-account-type
+    build:
+      context: ../ms-account-type
+    restart: always
+    ports:
+      - 8091:8091
+    links:
+      - mongodb
+      - ms-config-server
+      - ms-discovery
+    depends_on:
+      - mongodb
+      - ms-config-server
+      - ms-discovery
+    networks:
+      - development-network
+  ms-currency-type:
+    container_name: ms-currency-type
+    build:
+      context: ../ms-currency-type
+    restart: always
+    ports:
+      - 8089:8089
+    links:
+      - mongodb
+      - ms-config-server
+      - ms-discovery
+    depends_on:
+      - mongodb
+      - ms-config-server
+      - ms-discovery
+    networks:
+      - development-network      
 networks:
   development-network:
